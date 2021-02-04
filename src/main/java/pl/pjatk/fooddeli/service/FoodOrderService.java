@@ -1,5 +1,6 @@
 package pl.pjatk.fooddeli.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ public class FoodOrderService {
     FoodOrderRepository foodOrderRepository;
     FoodRepository foodRepository;
 
+//    public FoodOrderService() {}
+
     @Value("${bing.api.key}")
     String bingApiKey;
 
@@ -31,7 +34,7 @@ public class FoodOrderService {
         return foodOrderRepository.save(foodOrder);
     }
 
-    public float calculateTotalFoodCost(List<Food> orderItems) {
+    public Float calculateTotalFoodCost(List<Food> orderItems) {
         List<Long> idList = new ArrayList<>();
         for (Food food : orderItems) {
             idList.add(food.getId());

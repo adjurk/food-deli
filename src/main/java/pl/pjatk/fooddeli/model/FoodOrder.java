@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,9 @@ public class FoodOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
+    @NotNull
     private Customer customer;
+    @NotNull
     @ManyToOne
     private Restaurant restaurant;
     @ManyToMany
@@ -24,6 +27,7 @@ public class FoodOrder {
             name = "order_items",
             joinColumns = @JoinColumn(name = "food_order_id"),
             inverseJoinColumns = @JoinColumn(name = "food_id"))
+    @NotNull
     private List<Food> orderItems;
     private float totalCost;
     private int timeToPrepare;

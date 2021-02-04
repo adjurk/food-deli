@@ -5,6 +5,7 @@ import pl.pjatk.fooddeli.model.Food;
 import pl.pjatk.fooddeli.model.Restaurant;
 import pl.pjatk.fooddeli.repository.RestaurantRepository;
 
+import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,11 @@ public class RestaurantService {
     }
 
     public Optional<Restaurant> findRestaurant (Long id) {
-        return restaurantRepository.findById(id);
+        Optional<Restaurant> foundRestaurant = restaurantRepository.findById(id);
+        if (!foundRestaurant.isPresent()) {
+            throw new ValidationException("Restaurant with specified id was not found.");
+        }
+        return foundRestaurant;
     }
 
     public List<Restaurant> findAll() {

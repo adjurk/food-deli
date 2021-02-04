@@ -2,11 +2,15 @@ package pl.pjatk.fooddeli.json;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.pjatk.fooddeli.model.Food;
 
-@Getter
+import java.util.List;
+
 @Setter
-public class OrderResponse {
+@Getter
+public class OrderInformation {
     private Float totalCost;
     private Float deliveryCost;
     private Float deliveryDistance;
+    private List<Food> orderItems;
 }
