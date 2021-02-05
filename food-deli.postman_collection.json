@@ -1,0 +1,173 @@
+{
+	"info": {
+		"_postman_id": "aca8b2d4-5094-45b5-a631-66871459f033",
+		"name": "food-deli",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Init",
+			"item": [
+				{
+					"name": "POST /customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Adam\",\r\n    \"lastName\": \"Jurkiewicz\",\r\n    \"address\": \"Subisława, Gdańsk\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/customer",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST /restaurant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"First Restaurant\",\r\n    \"address\": \"Podwale Staromiejskie 51 Gdańsk\",\r\n    \"open\": true,\r\n    \"foods\": [\r\n        {\r\n            \"name\": \"French Fries\",\r\n            \"cost\": 12\r\n        },\r\n        {\r\n            \"name\": \"Vegan Bowl\",\r\n            \"cost\": 20\r\n        }\r\n    ],\r\n    \"maxDistance\": 12,\r\n    \"deliveryCost\": 6.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/restaurant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"restaurant"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST /food-order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"orderItems\": [\r\n    {\r\n      \"id\": 1,\r\n      \"name\": \"French Fries\",\r\n      \"cost\": 12.0\r\n    }\r\n  ],\r\n  \"restaurant\": {\r\n    \"id\": 1,\r\n    \"name\": \"First Restaurant\",\r\n    \"address\": \"Podwale Staromiejskie 51 Gdańsk\",\r\n    \"open\": true,\r\n    \"maxDistance\": 12.0,\r\n    \"deliveryCost\": 6.0\r\n  },\r\n  \"customer\": {\r\n    \"id\": 1,\r\n    \"firstName\": \"Adam\",\r\n    \"lastName\": \"Jurkiewicz\",\r\n    \"address\": \"Subisława, Gdańsk\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/food-order",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"food-order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /customer/id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/customer/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /restaurant",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Bing Maps",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0=Subislawa%20Gdansk&wp.1=Podwale%20Staromiejskie%20Gdansk&key=At36Iu_aivc6Tr6unfWtNd1851vsa2wQHjxNKyTQoY1ivG3u3a8JzZOKq4SfgOR6",
+					"protocol": "http",
+					"host": [
+						"dev",
+						"virtualearth",
+						"net"
+					],
+					"path": [
+						"REST",
+						"V1",
+						"Routes",
+						"Driving"
+					],
+					"query": [
+						{
+							"key": "wp.0",
+							"value": "Subislawa%20Gdansk"
+						},
+						{
+							"key": "wp.1",
+							"value": "Podwale%20Staromiejskie%20Gdansk"
+						},
+						{
+							"key": "key",
+							"value": "At36Iu_aivc6Tr6unfWtNd1851vsa2wQHjxNKyTQoY1ivG3u3a8JzZOKq4SfgOR6"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
