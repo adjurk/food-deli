@@ -5,10 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -27,20 +25,12 @@ public class Restaurant {
     private String address;
     private boolean isOpen; // TODO: implement opening days/hours
     @OneToMany(mappedBy = "restaurant", cascade = ALL)
-    private List<Food> foods;
+    @NotEmpty
+    private List<@Valid Food> foods;
     @NotNull
-    @Positive
+    @Positive(message = "Restaurant maximum distance must be greater than 0.") // TODO: how to show message with response?
     private Float maxDistance;
     @NotNull
     @PositiveOrZero
     private Float deliveryCost;
-
-    public Restaurant(String name, String address, boolean isOpen, List<Food> foods, Float maxDistance, Float deliveryCost) {
-        this.name = name;
-        this.address = address;
-        this.isOpen = isOpen;
-        this.foods = foods;
-        this.maxDistance = maxDistance;
-        this.deliveryCost = deliveryCost;
-    }
 }

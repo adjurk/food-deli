@@ -21,15 +21,9 @@ public class Food {
     private String name;
     @NotNull
     @PositiveOrZero
-    private float cost;
+    private Float cost;
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     @JsonIgnore
     private Restaurant restaurant;
-
-    public Food(String name, float cost, Restaurant restaurant) {
-        this.name = name;
-        this.cost = cost;
-        this.restaurant = restaurant;
-    }
 }

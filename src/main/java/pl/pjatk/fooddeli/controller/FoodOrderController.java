@@ -5,15 +5,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.pjatk.fooddeli.exception.OrderValidationException;
 import pl.pjatk.fooddeli.json.OrderInformation;
 import pl.pjatk.fooddeli.json.PlaceOrderResponse;
+
 import pl.pjatk.fooddeli.model.FoodOrder;
+import pl.pjatk.fooddeli.model.Restaurant;
 import pl.pjatk.fooddeli.service.CustomerService;
 import pl.pjatk.fooddeli.service.FoodOrderService;
 import pl.pjatk.fooddeli.service.RestaurantService;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/food-order")
@@ -30,29 +33,38 @@ public class FoodOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<PlaceOrderResponse> placeOrder(@Valid @RequestBody FoodOrder foodOrder){
-        //TODO: validate: customer/restaurant exists, order items are available
-        //TODO: calculate time to prepare
+    public ResponseEntity<PlaceOrderResponse> placeOrder(@Valid @RequestBody FoodOrder foodOrder) {
         PlaceOrderResponse placeOrderResponse = new PlaceOrderResponse();
+        Optional<Restaurant> restaurantFromDb;
 
+        // Check if restaurant, customer, orderItems exist
         try {
-            restaurantService.findRestaurant(foodOrder.getRestaurant().getId());
-            customerService.findCustomer(foodOrder.getCustomer().getId());
-        } catch (ValidationException e) {
+            restaurantFromDb = restaurantService.verifyRestaurantInOrder(foodOrder.getRestaurant().getId());
+            customerService.verifyCustomerInOrder(foodOrder.getCustomer().getId());
+            foodOrderService.verifyOrderItemsExist(foodOrder.getOrderItems());
+        } catch (OrderValidationException e) {
             placeOrderResponse.setMessage(e.getMessage());
             return ResponseEntity.status(404).body(placeOrderResponse);
         }
 
-        // Check delivery distance - otherwise order won't be delivered anyway
-        Float actualDeliveryDistance = foodOrderService.getDistanceFromBingMaps(
-                foodOrder.getRestaurant().getAddress(), foodOrder.getCustomer().getAddress());
+        Float actualDeliveryDistance;
 
-        if (foodOrderService.verifyDistance(foodOrder.getRestaurant().getMaxDistance(),actualDeliveryDistance)) {
+        // Check delivery distance - otherwise order won't be delivered anyway
+        try {
+            actualDeliveryDistance = foodOrderService.getDistanceFromBingMaps(
+                    foodOrder.getRestaurant().getAddress(), foodOrder.getCustomer().getAddress());
+        } catch (NullPointerException e) {
+            placeOrderResponse.setMessage("Location routing service unavailable, please try again later.");
+            return ResponseEntity.status(503).body(placeOrderResponse);
+        }
+
+        // Finally, use Bing Maps API to verify distance
+        if (foodOrderService.verifyDistance(foodOrder.getRestaurant().getMaxDistance(), actualDeliveryDistance)) {
 
             OrderInformation orderInformation = new OrderInformation();
             orderInformation.setDeliveryDistance(actualDeliveryDistance);
 
-            // Order between accepted delivery distance - calculate total cost
+            // Order is between accepted delivery distance - calculate delivery cost & total cost
             Float deliveryCost = foodOrderService.calculateDeliveryCost(foodOrder.getRestaurant().getDeliveryCost(),
                     actualDeliveryDistance);
             orderInformation.setDeliveryCost(deliveryCost);
@@ -60,8 +72,12 @@ public class FoodOrderController {
             Float totalCost = foodOrderService.calculateTotalFoodCost(foodOrder.getOrderItems()) + deliveryCost;
             foodOrder.setTotalCost(totalCost);
             orderInformation.setTotalCost(totalCost);
+            orderInformation.setRestaurantName(restaurantFromDb.get().getName());
+            orderInformation.setRestaurantAddress(restaurantFromDb.get().getAddress());
 
             // Finally, save order to database
+            // TODO: format all Floats up to two decimal points
+
             foodOrderService.placeOrder(foodOrder);
             orderInformation.setOrderItems(foodOrder.getOrderItems());
 

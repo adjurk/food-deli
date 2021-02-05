@@ -28,11 +28,11 @@ public class RestaurantController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Restaurant>> findRestaurantById(@PathVariable Long id) {
-        if (!restaurantService.findRestaurant(id).isPresent()) {
+        Optional<Restaurant> foundRestaurant = restaurantService.findRestaurant(id);
+        if (!foundRestaurant.isPresent()) {
             return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(restaurantService.findRestaurant(id));
         }
+        return ResponseEntity.ok(foundRestaurant);
     }
 
     @PostMapping

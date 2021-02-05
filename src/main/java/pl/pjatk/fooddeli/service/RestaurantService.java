@@ -1,11 +1,11 @@
 package pl.pjatk.fooddeli.service;
 
 import org.springframework.stereotype.Service;
+import pl.pjatk.fooddeli.exception.OrderValidationException;
 import pl.pjatk.fooddeli.model.Food;
 import pl.pjatk.fooddeli.model.Restaurant;
 import pl.pjatk.fooddeli.repository.RestaurantRepository;
 
-import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +19,16 @@ public class RestaurantService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public Optional<Restaurant> findRestaurant (Long id) {
+    public Optional<Restaurant> verifyRestaurantInOrder (Long id) throws OrderValidationException {
         Optional<Restaurant> foundRestaurant = restaurantRepository.findById(id);
         if (!foundRestaurant.isPresent()) {
-            throw new ValidationException("Restaurant with specified id was not found.");
+            throw new OrderValidationException("Restaurant with specified id was not found.");
         }
         return foundRestaurant;
+    }
+
+    public Optional<Restaurant> findRestaurant (Long id) {
+        return restaurantRepository.findById(id);
     }
 
     public List<Restaurant> findAll() {
