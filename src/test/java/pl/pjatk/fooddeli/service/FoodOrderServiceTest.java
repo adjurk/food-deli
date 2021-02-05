@@ -1,5 +1,6 @@
 package pl.pjatk.fooddeli.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,39 +26,25 @@ class FoodOrderServiceTest {
     private FoodOrderService foodOrderService;
 
     @Mock
-    private FoodRepository foodRepository;
+    private FoodService foodService;
 
     @Test
-    void placeOrder() {
-    }
+    void shouldVerifyOrderItemsExistThrowException() {
 
-    @Test
-    void calculateTotalFoodCost() {
-    }
+        Assertions.assertThrows(OrderValidationException.class, () -> {
+            List<Food> foods = new ArrayList<>();
+            Food foodOne = new Food();
+            Food foodTwo = new Food();
+            foodOne.setId(1L);
+            foodTwo.setId(50L);
+            foods.add(foodOne);
+            foods.add(foodTwo);
 
-    @Test
-    void getDistanceFromBingMaps() {
-    }
+            when(foodService.findFood(1L)).thenReturn(Optional.of(foodOne));
+            when(foodService.findFood(50L)).thenReturn(Optional.empty());
 
-    @Test(expected)
-    void shouldVerifyOrderItemsExistThrowException()  {
-        //given
-        List<Food> foods = new ArrayList<>();
-        Food foodOne = new Food();
-        Food foodTwo = new Food();
-        foodOne.setId(1L);
-        foodTwo.setId(50L);
-        foods.add(foodOne);
-        foods.add(foodTwo);
-
-        when(foodRepository.findById(1L)).thenReturn(Optional.of(new Food()));
-        when(foodRepository.findById(50L)).thenReturn(Optional.empty());
-        //when
-        doThrow(new OrderValidationException(""))
-                .when(foodOrderService)
-                .verifyOrderItemsExist(foods);
-        //then
-//        assertThat()
+            foodOrderService.verifyOrderItemsExist(foods);
+        });
     }
 
     @Test
