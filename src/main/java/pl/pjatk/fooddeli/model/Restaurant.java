@@ -1,8 +1,6 @@
 package pl.pjatk.fooddeli.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -14,6 +12,8 @@ import static javax.persistence.CascadeType.ALL;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Restaurant {
     @Id

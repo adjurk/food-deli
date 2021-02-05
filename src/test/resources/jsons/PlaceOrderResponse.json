@@ -1,0 +1,17 @@
+{
+  "message": "Order placed successfully!",
+  "orderInformation": {
+    "totalCost": 22.86,
+    "deliveryCost": 12.86,
+    "deliveryDistance": 10.0,
+    "restaurantName": "R One",
+    "restaurantAddress": "R One Street",
+    "orderItems": [
+      {
+        "id": 1,
+        "name": "French Fries",
+        "cost": 12.0
+      }
+    ]
+  }
+}

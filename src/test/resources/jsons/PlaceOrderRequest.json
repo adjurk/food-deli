@@ -1,0 +1,23 @@
+{
+  "orderItems": [
+    {
+      "id": 1,
+      "name": "French Fries",
+      "cost": 12.0
+    }
+  ],
+  "restaurant": {
+    "id": 1,
+    "name": "First Restaurant",
+    "address": "Podwale Staromiejskie 51 Gdańsk",
+    "open": true,
+    "maxDistance": 12.0,
+    "deliveryCost": 6.0
+  },
+  "customer": {
+    "id": 1,
+    "firstName": "Adam",
+    "lastName": "Jurkiewicz",
+    "address": "Subisława, Gdańsk"
+  }
+}
