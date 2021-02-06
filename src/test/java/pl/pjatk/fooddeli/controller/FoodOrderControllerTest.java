@@ -44,9 +44,11 @@ class FoodOrderControllerTest {
 
     @Test
     void placeOrder() throws Exception {
+        // We need this restaurant object for comparison with our JSON in mockMvc so we know values are saved
         Restaurant restaurant = Restaurant.builder().id(1L).name("R One").address("R One Street").isOpen(true).maxDistance(12.0F).deliveryCost(6.0F).build();
         Float actualDeliveryDistance = 10.0F;
 
+        // Mock all methods from
         when(restaurantService.verifyRestaurantInOrder(anyLong())).thenReturn(Optional.of(restaurant));
         when(customerService.verifyCustomerInOrder(anyLong())).thenReturn(Optional.of(new Customer()));
         when(foodOrderService.getDistanceFromBingMaps(anyString(),anyString())).thenReturn(actualDeliveryDistance);
