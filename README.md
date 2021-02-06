@@ -6,6 +6,8 @@ Simple Java REST API for MPR classes @ PJAIT 2021.
 
 ## Running
 
+Before running, place `bing.api.key` generated from https://www.bingmapsportal.com/ inside `src/resources/application.properties` by replacing `BING_API_KEY`.
+
 ### With Maven
 
 Prerequisites:
