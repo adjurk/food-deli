@@ -15,10 +15,9 @@ import pl.pjatk.fooddeli.model.FoodOrder;
 import pl.pjatk.fooddeli.repository.FoodOrderRepository;
 import pl.pjatk.fooddeli.repository.FoodRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
 
 @Service
 public class FoodOrderService {
@@ -44,20 +43,30 @@ public class FoodOrderService {
         for (Food food : orderItems) {
             idList.add(food.getId());
         }
-        return foodRepository.getTotalCostFromFoodOrder(idList);
+        return formatDecimalPoints(foodRepository.getTotalCostFromFoodOrder(idList));
     }
 
-    public Float getDistanceFromBingMaps(String restaurantAddress, String customerAddress) {
+    public Float getDistanceFromBingMaps(String restaurantAddress, String customerAddress) throws OrderValidationException {
         try {
             RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
             RestTemplate restTemplate = restTemplateBuilder.build();
             String url = "http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0={restaurantAddress}&wp.1={customerAddress}&key={bingApiKey}";
             ResponseEntity<DistanceResponse> res = restTemplate.getForEntity(
                     url, DistanceResponse.class, restaurantAddress, customerAddress, bingApiKey);
-            return res.getBody().getResourceSets().get(0).getResources().get(0).getTravelDistance(); // TODO: change to Objects.RequireNonNull and write test to check behavior
+            return formatDecimalPoints(res.getBody().getResourceSets().get(0).getResources().get(0).getTravelDistance());
         } catch (Exception e) {
-            throw new NullPointerException();
+            throw new OrderValidationException(e.getMessage());
         }
+    }
+
+    // Delivery up to 3 km is free for all restaurants, method below calculates other cases
+    public Float calculateDeliveryCost(Float restaurantDeliveryCost, Float deliveryDistance) {
+        if (deliveryDistance > 3) {
+            for (float i = 3f; i <= deliveryDistance; i += 0.5f) {
+                restaurantDeliveryCost += 0.49f;
+            }
+        }
+        return formatDecimalPoints(restaurantDeliveryCost);
     }
 
     public Boolean verifyDistance(Float restaurantMaxDeliveryDistance, Float actualDeliveryDistance) {
@@ -76,13 +85,8 @@ public class FoodOrderService {
         }
     }
 
-    // Delivery up to 3 km is free for all restaurants, method below calculates other cases
-    public Float calculateDeliveryCost(Float restaurantDeliveryCost, Float deliveryDistance) {
-        if (deliveryDistance > 3) {
-            for (float i = 3f; i <= deliveryDistance; i += 0.5f) {
-                restaurantDeliveryCost += 0.49f;
-            }
-        }
-        return restaurantDeliveryCost;
+    private Float formatDecimalPoints(Float value) {
+        DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
+        return Float.valueOf(df.format(value));
     }
 }

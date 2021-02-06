@@ -29,7 +29,8 @@ public class FoodOrder {
             inverseJoinColumns = @JoinColumn(name = "food_id"))
     @NotNull
     private List<Food> orderItems;
-    private float totalCost;
+    @Column(precision = 2)
+    private Float totalCost;
     private int timeToPrepare;
 
 }

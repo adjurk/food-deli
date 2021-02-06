@@ -59,11 +59,11 @@ class FoodOrderServiceTest {
     void shouldExceed3Kilometers() {
         //given
         Float restaurantDeliveryCost = 6.0f;
-        Float deliveryDistance = 10.0f;
+        Float deliveryDistance = 5.0f;
         //when
         Float totalDeliveryCost = foodOrderService.calculateDeliveryCost(restaurantDeliveryCost, deliveryDistance);
         //then
-        assertThat(totalDeliveryCost.equals(12.86f));
+        assertThat(totalDeliveryCost.equals(8.45f));
     }
 
     @Test

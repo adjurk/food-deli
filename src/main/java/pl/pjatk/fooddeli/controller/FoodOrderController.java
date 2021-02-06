@@ -53,7 +53,7 @@ public class FoodOrderController {
         try {
             actualDeliveryDistance = foodOrderService.getDistanceFromBingMaps(
                     foodOrder.getRestaurant().getAddress(), foodOrder.getCustomer().getAddress());
-        } catch (NullPointerException e) {
+        } catch (OrderValidationException e) {
             placeOrderResponse.setMessage("Location routing service unavailable, please try again later.");
             return ResponseEntity.status(503).body(placeOrderResponse);
         }
@@ -68,7 +68,6 @@ public class FoodOrderController {
             Float deliveryCost = foodOrderService.calculateDeliveryCost(foodOrder.getRestaurant().getDeliveryCost(),
                     actualDeliveryDistance);
             orderInformation.setDeliveryCost(deliveryCost);
-
             Float totalCost = foodOrderService.calculateTotalFoodCost(foodOrder.getOrderItems()) + deliveryCost;
             foodOrder.setTotalCost(totalCost);
             orderInformation.setTotalCost(totalCost);
@@ -76,7 +75,6 @@ public class FoodOrderController {
             orderInformation.setRestaurantAddress(restaurantFromDb.get().getAddress());
 
             // Finally, save order to database
-            // TODO: format all Floats up to two decimal points
 
             foodOrderService.placeOrder(foodOrder);
             orderInformation.setOrderItems(foodOrder.getOrderItems());
