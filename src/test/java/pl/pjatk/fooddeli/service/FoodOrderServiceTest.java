@@ -8,16 +8,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.pjatk.fooddeli.exception.OrderValidationException;
 import pl.pjatk.fooddeli.model.Food;
-import pl.pjatk.fooddeli.repository.FoodOrderRepository;
-import pl.pjatk.fooddeli.repository.FoodRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FoodOrderServiceTest {
@@ -63,7 +60,7 @@ class FoodOrderServiceTest {
         //when
         Float totalDeliveryCost = foodOrderService.calculateDeliveryCost(restaurantDeliveryCost, deliveryDistance);
         //then
-        assertThat(totalDeliveryCost.equals(8.45f));
+        assertThat(totalDeliveryCost.equals(8.45f)); // value entered here was calculated manually, correct from business side
     }
 
     @Test

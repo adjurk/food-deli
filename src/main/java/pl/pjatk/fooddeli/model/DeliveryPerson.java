@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 @Entity
+// on roadmap :)
 public class DeliveryPerson {
     @Id
     @GeneratedValue

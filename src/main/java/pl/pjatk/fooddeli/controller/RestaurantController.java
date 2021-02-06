@@ -1,9 +1,7 @@
 package pl.pjatk.fooddeli.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pl.pjatk.fooddeli.model.Food;
 import pl.pjatk.fooddeli.model.Restaurant;
 import pl.pjatk.fooddeli.service.RestaurantService;
 
@@ -39,8 +37,5 @@ public class RestaurantController {
     public ResponseEntity<Restaurant> addRestaurant(@Valid @RequestBody Restaurant restaurant) {
         return ResponseEntity.ok(restaurantService.save(restaurant));
     }
-
-//    @PostMapping("/food")
-//    public ResponseEntity<Food> addFoodToRestaurant(@RequestBody Food food,)
 
 }

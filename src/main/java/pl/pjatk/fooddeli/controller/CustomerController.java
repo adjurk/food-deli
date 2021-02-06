@@ -2,7 +2,6 @@ package pl.pjatk.fooddeli.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.pjatk.fooddeli.exception.OrderValidationException;
 import pl.pjatk.fooddeli.model.Customer;
 import pl.pjatk.fooddeli.service.CustomerService;
 

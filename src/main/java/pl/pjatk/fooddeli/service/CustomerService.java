@@ -11,15 +11,15 @@ import java.util.Optional;
 public class CustomerService {
     private CustomerRepository customerRepository;
 
-    public CustomerService (CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
-    public Customer save (Customer customer) {
+    public Customer save(Customer customer) {
         return customerRepository.save(customer);
     }
 
-    public Optional<Customer> verifyCustomerInOrder (Long id) throws OrderValidationException {
+    public Optional<Customer> verifyCustomerInOrder(Long id) throws OrderValidationException {
         Optional<Customer> foundCustomer = customerRepository.findById(id);
         if (!foundCustomer.isPresent()) {
             throw new OrderValidationException("Customer with specified id was not found.");
@@ -27,5 +27,7 @@ public class CustomerService {
         return foundCustomer;
     }
 
-    public Optional<Customer> findCustomer (Long id) { return customerRepository.findById(id);}
+    public Optional<Customer> findCustomer(Long id) {
+        return customerRepository.findById(id);
+    }
 }

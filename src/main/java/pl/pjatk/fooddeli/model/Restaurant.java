@@ -28,7 +28,7 @@ public class Restaurant {
     @NotEmpty
     private List<@Valid Food> foods;
     @NotNull
-    @Positive(message = "Restaurant maximum distance must be greater than 0.") // TODO: how to show message with response?
+    @Positive(message = "Restaurant maximum distance must be greater than 0.") // TODO: how to show message with response? ref: RestaurantController:37 @Valid
     private Float maxDistance;
     @NotNull
     @PositiveOrZero

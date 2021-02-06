@@ -3,7 +3,6 @@ package pl.pjatk.fooddeli.json;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pjatk.fooddeli.model.Food;
-import pl.pjatk.fooddeli.model.Restaurant;
 
 import java.util.List;
 

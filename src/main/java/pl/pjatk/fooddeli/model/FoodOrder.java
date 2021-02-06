@@ -29,7 +29,7 @@ public class FoodOrder {
             inverseJoinColumns = @JoinColumn(name = "food_id"))
     @NotNull
     private List<Food> orderItems;
-    @Column(precision = 2)
+    @Column(precision = 2) // TODO: does not work in h2?
     private Float totalCost;
     private int timeToPrepare;
 

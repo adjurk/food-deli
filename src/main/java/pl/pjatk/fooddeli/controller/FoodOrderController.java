@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.pjatk.fooddeli.exception.OrderValidationException;
 import pl.pjatk.fooddeli.json.OrderInformation;
 import pl.pjatk.fooddeli.json.PlaceOrderResponse;
-
 import pl.pjatk.fooddeli.model.FoodOrder;
 import pl.pjatk.fooddeli.model.Restaurant;
 import pl.pjatk.fooddeli.service.CustomerService;
@@ -49,7 +48,7 @@ public class FoodOrderController {
 
         Float actualDeliveryDistance;
 
-        // Check delivery distance - otherwise order won't be delivered anyway
+        // Use Bing Maps API to verify distance
         try {
             actualDeliveryDistance = foodOrderService.getDistanceFromBingMaps(
                     foodOrder.getRestaurant().getAddress(), foodOrder.getCustomer().getAddress());
@@ -58,13 +57,14 @@ public class FoodOrderController {
             return ResponseEntity.status(503).body(placeOrderResponse);
         }
 
-        // Finally, use Bing Maps API to verify distance
+        // Check delivery distance - otherwise order won't be delivered anyway
         if (foodOrderService.verifyDistance(foodOrder.getRestaurant().getMaxDistance(), actualDeliveryDistance)) {
+            // Order is between accepted delivery distance
 
             OrderInformation orderInformation = new OrderInformation();
             orderInformation.setDeliveryDistance(actualDeliveryDistance);
 
-            // Order is between accepted delivery distance - calculate delivery cost & total cost
+            // Calculate delivery cost & total cost
             Float deliveryCost = foodOrderService.calculateDeliveryCost(foodOrder.getRestaurant().getDeliveryCost(),
                     actualDeliveryDistance);
             orderInformation.setDeliveryCost(deliveryCost);
